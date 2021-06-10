@@ -1,20 +1,20 @@
-### Intro
+## Intro
 The code is for the paper Anonymous Walk Embeddings (https://arxiv.org/abs/1805.11921) that creates embeddings for entire graphs, based on feature-based and data-driven approaches, and evaluates the results on graph classification task.
 
-### Tutorial
+## Tutorial
 
 Check a notebook `Tutorial.ipynb` to see how to get network embeddings, load/save embeddings matrix, calculate kernel matrix, and perform SVM calculation.
 
-### Running code
+## Running code
 
-The following command will run data-driven model with the parameters.
+The following command will run feature-based model with the parameters.
 ```
 python AnonymousWalkEmbeddings.py --dataset mutag --root ./Datasets --window_size 16 --batch_size 100 --batches_per_epoch 100 --num_samples 64 --steps 10 --results_folder mutag_results
 ```
 
 The following command will run data-driven model with the parameters.
 ```
-python AnonymousWalkKernel.py --dataset mutag --root ./Datasets --steps 10 --method sampling --MC 10000 --results_folder mutag_results
+python AnonymousWalkKernel.py --dataset mutag --root ./Datasets/ --steps 10 --method sampling --MC 10000 --results_folder mutag_results
 ```
 
 Alternatively, you can change default parameters in the file doc2vec.py.
@@ -41,7 +41,7 @@ Below is the list of all arguments:
 - **MC** Number of Monte-Carlo iterations.
 - **results_folder** Folder for storing results.
 
-#### Running with Docker
+### Running with Docker
 To run the code on docker, we first need to obtain an appropriate image. After installing [Docker](https://docs.docker.com/engine/installation/) on your computer, you first [pull](https://docs.docker.com/docker-hub/repos/) an image `gcr.io/tensorflow/tensorflow` for Tensorflow:
 ```
 docker pull gcr.io/tensorflow/tensorflow

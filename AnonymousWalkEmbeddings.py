@@ -28,6 +28,7 @@ from AnonymousWalkKernel import AnonymousWalks, GraphKernel, Evaluation
 from sklearn import svm
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 SEED = 2018
 
@@ -156,7 +157,7 @@ class AWE(object):
 
             for en, graph_fn in enumerate(self.sorted_graphs):
                 if en > 0 and not en%100:
-                    print(f"Graph {en}")
+                    print("Graph %d"%en)
                 g2v = AnonymousWalks()
                 g2v.read_graphml(self.folder + graph_fn)
                 self.nodes_per_graphs[en] = len(g2v.graph)
@@ -296,10 +297,12 @@ class AWE(object):
         print('Initialized')
         random_order = list(range(len(self.sorted_graphs)))
         random.shuffle(random_order)
+        random_order = list(random_order)
         for ep in range(self.epochs):
-            print('Epoch: {}'.format(ep))
+            print('Epoch: {}/{}'.format(ep,self.epochs))
             time2epoch = time.time()
-            for rank_id, doc_id in enumerate(random_order):
+            for rank_id in tqdm(random_order):
+                doc_id = random_order[rank_id]
             # for doc_id, graph_fn in enumerate(self.sorted_graphs):
             #     graph_fn = self.sorted_graphs[doc_id]
 
@@ -315,9 +318,9 @@ class AWE(object):
 
                 self._train_thread_body()
 
-                if rank_id > 0 and not rank_id%100:
-                    print('Graph {}-{}: {:.2f}'.format(ep, rank_id, time.time() - time2graph))
-            print('Time for epoch {}: {:.2f}'.format(ep, time.time() - time2epoch))
+                #if rank_id > 0 and not rank_id%100:
+                    #print('Graph {}-{}: {:.2f} sec'.format(ep, rank_id, time.time() - time2graph))
+            print('Time for epoch {}: {:.2f} sec'.format(ep, time.time() - time2epoch))
             # save temporary embeddings
             if not ep%10:
                 self.graph_embeddings = session.run(self.normalized_doc_embeddings)
@@ -338,15 +341,15 @@ if __name__ == '__main__':
 
     batch_size = 100
     window_size = 16
-    embedding_size_w = 128
-    embedding_size_d = 128
+    embedding_size_w = 32
+    embedding_size_d = 32
     num_samples = 10
 
     concat = False
     loss_type = 'sampled_softmax'
     optimize = 'Adagrad'
     learning_rate = 0.1
-    root = '../Datasets/'
+    root = 'Datasets/'
     ext = 'graphml'
     steps = 10
     epochs = 100
